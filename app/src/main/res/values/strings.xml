@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ChangePrefix</string>
+    <string name="deny_message">Denied</string>
+</resources>
