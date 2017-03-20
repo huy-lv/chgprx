@@ -1,6 +1,7 @@
 package com.tamine.changeprefix;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,12 +15,12 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
+    public static ArrayList<Contact> contacts = new ArrayList<>();
     @BindView(R.id.contact_rv)
     RecyclerView contact_rv;
-    public static ArrayList<Contact> contacts = new ArrayList<>();
-
     ContactAdapter contactAdapter;
     @BindView(R.id.contact_pb)    ProgressBar contact_pb;
 
@@ -29,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        contact_rv.setLayoutManager(llm);
+        contactAdapter = new ContactAdapter(this, contacts);
+        contact_rv.setAdapter(contactAdapter);
+
 
         new TedPermission(this).setPermissionListener(new PermissionListener() {
             @Override
@@ -46,12 +54,10 @@ public class MainActivity extends AppCompatActivity {
                 .setPermissions(Manifest.permission.READ_CONTACTS,Manifest.permission.WRITE_CONTACTS).check();
 
 
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        contact_rv.setLayoutManager(llm);
-        contactAdapter = new ContactAdapter(this, contacts);
-        contact_rv.setAdapter(contactAdapter);
+    }
 
-
-
+    @OnClick(R.id.btChange)
+    void change() {
+        startActivity(new Intent(this, ReviewActivity.class));
     }
 }

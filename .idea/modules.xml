@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ChangePrefix.iml" filepath="$PROJECT_DIR$/ChangePrefix.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/chgprx.iml" filepath="$PROJECT_DIR$/.idea/chgprx.iml" />
     </modules>
   </component>
 </project>
