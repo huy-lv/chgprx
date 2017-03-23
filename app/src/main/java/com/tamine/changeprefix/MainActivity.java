@@ -2,27 +2,33 @@ package com.tamine.changeprefix;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ProgressBar;
-
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
+
+import static com.tamine.changeprefix.Utils.contacts;
+
 
 public class MainActivity extends AppCompatActivity {
-    public static ArrayList<Contact> contacts = new ArrayList<>();
-    @BindView(R.id.contact_rv)
-    RecyclerView contact_rv;
-    ContactAdapter contactAdapter;
+    @BindView(R.id.contact_rv)  RecyclerView contact_rv;
+    @BindView(R.id.contact_rv_scroller)    VerticalRecyclerViewFastScroller contact_rv_scroller;
     @BindView(R.id.contact_pb)    ProgressBar contact_pb;
+    ContactAdapter contactAdapter;
+
 
 
     @Override
@@ -31,33 +37,64 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        contact_rv.setLayoutManager(llm);
-        contactAdapter = new ContactAdapter(this, contacts);
+        contactAdapter = new ContactAdapter(this,contacts);
+        contact_rv.setLayoutManager(new LinearLayoutManager(this));
         contact_rv.setAdapter(contactAdapter);
 
+        contact_rv_scroller.setRecyclerView(contact_rv);
+        contact_rv.setOnScrollListener(contact_rv_scroller.getOnScrollListener());
 
-        new TedPermission(this).setPermissionListener(new PermissionListener() {
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)== PackageManager.PERMISSION_GRANTED) {
+            getContacts();
+        }else{
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CONTACTS},1);
+        }
+    }
+
+    @OnClick(R.id.btScan)
+    void scan(){
+        startActivity(new Intent(MainActivity.this,ReviewActivity.class));
+    }
+
+    void getContacts(){
+        new AsyncTask<Void,Void,Void>(){
             @Override
-            public void onPermissionGranted() {
-                GetContactTask t = new GetContactTask(MainActivity.this,contact_pb,contactAdapter);
-                t.execute();
+            protected void onPreExecute() {
+                super.onPreExecute();
+                contact_pb.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-//                Toast.makeText(PickPhotoActivity.this,"STOP",Toast.LENGTH_SHORT).show();
-                Utils.createAlertDialog(MainActivity.this,"STOPP");
+            protected Void doInBackground(Void... params) {
+                Cursor cursor = getContentResolver().query(   ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null,null, null);
+                while (cursor.moveToNext()) {
+                    String name =cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                    String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    contacts.add(new Contact(name,phoneNumber));
+                }
+                cursor.close();
+                return null;
             }
-        }).setDeniedMessage(getString(R.string.deny_message))
-                .setPermissions(Manifest.permission.READ_CONTACTS,Manifest.permission.WRITE_CONTACTS).check();
 
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                contact_pb.setVisibility(View.GONE);
+            }
+        }.execute();
 
     }
 
-    @OnClick(R.id.btChange)
-    void change() {
-        startActivity(new Intent(this, ReviewActivity.class));
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if(requestCode==1){
+            if(grantResults.length > 0){
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    getContacts();
+                }
+            }
+        }
     }
 }

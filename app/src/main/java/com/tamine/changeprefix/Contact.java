@@ -5,8 +5,27 @@ package com.tamine.changeprefix;
  */
 
 public class Contact  {
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    long id;
     String name;
     String number;
+
+    public boolean isChange() {
+        return change;
+    }
+
+    public void setChange(boolean change) {
+        this.change = change;
+    }
+
+    boolean change;
 
     public String getName() {
         return name;
@@ -24,8 +43,7 @@ public class Contact  {
         this.number = number;
     }
 
-    public Contact(String name, String number) {
-
+    public Contact( String name, String number) {
         this.name = name;
         this.number = number;
     }

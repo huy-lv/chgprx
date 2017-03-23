@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by huylv on 17-Mar-17.
+ * Created by huylv on 23-Mar-17.
  */
 
 public class ContactAdapter  extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder>{

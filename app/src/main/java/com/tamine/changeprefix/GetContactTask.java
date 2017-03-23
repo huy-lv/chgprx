@@ -7,7 +7,7 @@ import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import static com.tamine.changeprefix.MainActivity.contacts;
+import static com.tamine.changeprefix.Utils.contacts;
 
 /**
  * Created by huylv on 17-Mar-17.
@@ -16,12 +16,11 @@ import static com.tamine.changeprefix.MainActivity.contacts;
 public class GetContactTask extends AsyncTask<Void,Void,Void> {
     Context context;
     ProgressBar pb;
-    ContactAdapter adapter;
 
-    GetContactTask(Context c, ProgressBar p,ContactAdapter cc){
+    GetContactTask(Context c, ProgressBar p){
         context = c;
         pb = p;
-        adapter =  cc;
+
     }
 
     @Override
@@ -32,10 +31,12 @@ public class GetContactTask extends AsyncTask<Void,Void,Void> {
     @Override
     protected Void doInBackground(Void... params) {
         Cursor cursor = context.getContentResolver().query(   ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null,null, null);
+        int i=0;
         while (cursor.moveToNext()) {
             String name =cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
             contacts.add(new Contact(name,phoneNumber));
+            i++;
         }
         return null;
     }
@@ -43,7 +44,7 @@ public class GetContactTask extends AsyncTask<Void,Void,Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        adapter.notifyDataSetChanged();
+
         pb.setVisibility(View.INVISIBLE);
     }
 }

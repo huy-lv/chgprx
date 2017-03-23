@@ -1,19 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <!--<ImageView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content" />-->
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@color/color_item_background"
+    android:orientation="vertical"
+    android:layout_margin="3dp"
+    >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/item_name"
-        android:text="Name"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/item_number"
-        android:text="Number"/>
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/item_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/item_name"
+            android:layout_margin="5dp"
+            android:text="Number" />
+
+        <io.ghyeok.stickyswitch.widget.StickySwitch
+            android:id="@+id/item_sw"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            app:iconPadding="15dp"
+            app:iconSize="12dp"
+            app:leftIcon="@drawable/ic_check_black_24dp"
+            app:leftText="Change"
+            app:rightIcon="@drawable/ic_close_black_24dp"
+            app:rightText="Ignore"
+            app:selectedTextSize="14sp"
+            app:textSize="12sp" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
