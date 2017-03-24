@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fast_scroll_overlay_text_size">10dp</dimen>
+    <dimen name="grid_column_width">50dp</dimen>
+</resources>

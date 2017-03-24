@@ -5,17 +5,59 @@ package com.tamine.changeprefix;
  */
 
 public class Contact  {
-    public long getId() {
-        return id;
+
+    public int sectionManager;
+    public int sectionFirstPosition;
+    public boolean isHeader;
+    boolean change;
+    private String name;
+    private String number;
+
+    public Contact(String name, String number) {
+        this.name = name;
+        this.number = number;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public Contact(String name, boolean isHeader, int sectionManager, int sectionFirstPosition) {
+        this.name = name;
+        change = true;
+        this.sectionManager = sectionManager;
+        this.sectionFirstPosition = sectionFirstPosition;
+        this.isHeader = isHeader;
     }
 
-    long id;
-    String name;
-    String number;
+    public Contact(Contact c, boolean isHeader, int sectionManager, int sectionFirstPosition) {
+        this.name = c.getName();
+        this.number = c.getNumber();
+        change = true;
+        this.sectionManager = sectionManager;
+        this.sectionFirstPosition = sectionFirstPosition;
+        this.isHeader = isHeader;
+    }
+
+    public int getSectionManager() {
+        return sectionManager;
+    }
+
+    public void setSectionManager(int sectionManager) {
+        this.sectionManager = sectionManager;
+    }
+
+    public int getSectionFirstPosition() {
+        return sectionFirstPosition;
+    }
+
+    public void setSectionFirstPosition(int sectionFirstPosition) {
+        this.sectionFirstPosition = sectionFirstPosition;
+    }
+
+    public boolean isHeader() {
+        return isHeader;
+    }
+
+    public void setHeader(boolean header) {
+        isHeader = header;
+    }
 
     public boolean isChange() {
         return change;
@@ -24,8 +66,6 @@ public class Contact  {
     public void setChange(boolean change) {
         this.change = change;
     }
-
-    boolean change;
 
     public String getName() {
         return name;
@@ -43,8 +83,28 @@ public class Contact  {
         this.number = number;
     }
 
-    public Contact( String name, String number) {
-        this.name = name;
-        this.number = number;
+    public void setValue(String header, boolean b, int sectionManager, int sectionFirstPosition) {
+        name = header;
+        isHeader = b;
+        this.sectionManager = sectionManager;
+        this.sectionFirstPosition = sectionFirstPosition;
+    }
+
+    public void setValue(boolean b, int sectionManager, int sectionFirstPosition) {
+        isHeader = b;
+        this.sectionManager = sectionManager;
+        this.sectionFirstPosition = sectionFirstPosition;
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "name='" + name + '\'' +
+                ", number='" + number + '\'' +
+                ", sectionManager=" + sectionManager +
+                ", sectionFirstPosition=" + sectionFirstPosition +
+                ", isHeader=" + isHeader +
+                ", change=" + change +
+                '}';
     }
 }
