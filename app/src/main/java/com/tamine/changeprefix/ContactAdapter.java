@@ -3,6 +3,7 @@ package com.tamine.changeprefix;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,11 +31,34 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     private int mHeaderDisplay;
     private boolean mMarginsFixed;
 
-    ContactAdapter(Context c, ArrayList<Contact> cc, int headermode) {
+    ContactAdapter(Context c, ArrayList<Contact> cc) {
         context = c;
-        contactList = cc;
-        mHeaderDisplay = headermode;
+        contactList = forwardList(cc);
         mMarginsFixed = true;
+    }
+
+    ArrayList<Contact> forwardList(ArrayList<Contact> cc) {
+        ArrayList<Contact> end = new ArrayList<>();
+        String lastHeader = "";
+        int sectionManager = -1;
+        int headerCount = 0;
+        int sectionFirstPosition = 0;
+        for (int i = 0; i < cc.size(); i++) {
+            String header = cc.get(i).getName().substring(0, 1).toUpperCase();
+            if (!TextUtils.equals(lastHeader, header)) {
+                // Insert new header view and update section data.
+                sectionManager = (sectionManager + 1) % 2;
+                sectionFirstPosition = i + headerCount;
+                lastHeader = header;
+                headerCount += 1;
+                end.add(new Contact(header, true, sectionManager, sectionFirstPosition));
+
+            }
+            end.add(new Contact(cc.get(i), false, sectionManager, sectionFirstPosition));
+//                        contacts.get(i).setValue(false, sectionManager, sectionFirstPosition);
+
+        }
+        return end;
     }
 
     @Override
@@ -99,6 +123,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         return contactList.size();
     }
 
+    public void redrawList(ArrayList<Contact> cc) {
+        contactList.clear();
+        contactList.addAll(forwardList(cc));
+        notifyDataSetChanged();
+    }
 
     class ContactViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.item_name)
@@ -116,4 +145,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         }
 
     }
+
+
 }
