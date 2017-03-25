@@ -13,7 +13,8 @@ public class Utils {
 
     public static ArrayList<Contact> contacts = new ArrayList<>();
     public static ArrayList<Prefix> old_new = new ArrayList<>();
-
+    public static int CHANGING_TYPE_1 = 1;
+    public static int CHANGING_TYPE_2 = 2;
 
     static {
         old_new.add(new Prefix("Sơn La", 22, 212));
